@@ -2,22 +2,34 @@ pipeline {
     agent any
 
     stages {
-        stage('Testing Environment') {
+     // main SATGES
+        stage ("1st stage : Git checkout PLEAASE"){
+            steps{
+        git branch: 'main', 
+            url: 'https://github.com/hazem-soussi/projet_esprit.git'
+            }
+        
+        }
+    
+        
+                stage('2nd Stage : Maven Build Project') {
             steps {
-                dir("tpAchatProject/") {
-                    sh 'mvn test -Dtest=ControllerAndServiceSuite'
-                    sh 'mvn test -Dtest=IntegrationSuite'
-                    sh 'mvn test -DfailIfNoTests=false'
-                }
+                echo "Build our project"
+                sh 'mvn clean install '
             }
         }
-        stage('Build') {
-            steps {
-                dir("tpAchatProject/"){
-                    sh 'mvn install -DskipTests'
-                }
+        
+        
+        
+
+        
+             stage ("3rd Stage : unit testing"){
+            steps{
+                sh "mvn test"
             }
+        
         }
+        
         stage('Docker compose') {
             steps {
                 sh 'sudo docker-compose build'
