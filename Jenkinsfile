@@ -7,6 +7,7 @@ pipeline {
                 dir("tpAchatProject/") {
                     sh 'mvn test -Dtest=ControllerAndServiceSuite'
                     sh 'mvn test -Dtest=IntegrationSuite'
+                    sh 'mvn test -DfailIfNoTests=false'
                 }
             }
         }
