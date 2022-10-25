@@ -34,16 +34,7 @@ services:
     stdin_open: true
     tty: true
     
-     backendserver:
-    build: ./tpAchatProject/
-    ports:
-           - "8081"
-    links:
-           - "db"
-    depends_on:
-           - "db"
-    restart: always
-    
+
     
   frontend:
     build: ./crud-tuto-front/
