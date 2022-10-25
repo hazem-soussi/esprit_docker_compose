@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+ database:
+  image: mysql
+  container_name: database
+  environment:
+   MYSQL_ROOT_PASSWORD: password
+   MYSQL_DATABASE: compose
+   MYSQL_USER: user
+   MYSQL_PASSWORD: password
+  ports:
+   - 3306:3306
+  volumes:
+   - ./mysql_database:/var/lib/mysql
+  networks:
+   - backendNetwork
+        
+ springapi:
+  image: openjdk:8
+  container_name: springapi
+  ports:
+   - 8080:8080
+  depends_on:
+   - database
+  volumes:
+   - ./Spring/target/docker-compose.jar:/docker-compose.jar
+  command: ["java", "-jar", "docker-compose.jar"]
+  networks:
+   - backendNetwork
+   - frontendNetwork
+   
+ angular:
+  image: nginx:alpine
+  container_name: angular
+  restart: always
+  ports:
+   - 4200:80
+  depends_on:
+   - springapi
+  volumes:
+   - ./Angular/dist/Angular:/usr/share/nginx/html
+  networks:
+   - frontendNetwork
+
+networks:
+ backendNetwork:
+ frontendNetwork:
+            
